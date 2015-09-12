@@ -43,6 +43,7 @@ static struct healthd_config healthd_config = {
     .periodic_chores_interval_fast = DEFAULT_PERIODIC_CHORES_INTERVAL_FAST,
     .periodic_chores_interval_slow = DEFAULT_PERIODIC_CHORES_INTERVAL_SLOW,
     .batteryStatusPath = String8(String8::kEmptyString),
+    .batteryChargeRatePath = String8(String8::kEmptyString),
     .batteryHealthPath = String8(String8::kEmptyString),
     .batteryPresentPath = String8(String8::kEmptyString),
     .batteryCapacityPath = String8(String8::kEmptyString),
@@ -55,6 +56,20 @@ static struct healthd_config healthd_config = {
     .energyCounter = NULL,
     .boot_min_cap = 0,
     .screen_on = NULL,
+    .dockBatterySupported = false,
+    .dockBatteryStatusPath = String8(String8::kEmptyString),
+    .dockBatteryHealthPath = String8(String8::kEmptyString),
+    .dockBatteryPresentPath = String8(String8::kEmptyString),
+    .dockBatteryCapacityPath = String8(String8::kEmptyString),
+    .dockBatteryVoltagePath = String8(String8::kEmptyString),
+    .dockBatteryTemperaturePath = String8(String8::kEmptyString),
+    .dockBatteryTechnologyPath = String8(String8::kEmptyString),
+    .dockBatteryCurrentNowPath = String8(String8::kEmptyString),
+    .dockBatteryCurrentAvgPath = String8(String8::kEmptyString),
+    .dockBatteryChargeCounterPath = String8(String8::kEmptyString),
+    .dockEnergyCounter = NULL,
+    .mapBatteryStatusString = NULL,
+    .mapChargeRateString = NULL,
 };
 
 static int eventct;
