@@ -163,68 +163,6 @@ static struct ss_func_desc ss_descriptors = {
         .bEndpointAddress = 1 | USB_DIR_OUT,
         .bmAttributes = USB_ENDPOINT_XFER_BULK,
         .wMaxPacketSize = MAX_PACKET_SIZE_SS,
-#if defined(FUNCTIONFS_SS_DESC_MAGIC) || defined(FUNCTIONFS_HAS_SS_COUNT)
-#define HAS_SS_DESCS 1
-#endif
-
-static const struct {
-    struct usb_functionfs_descs_head header;
-#ifdef FUNCTIONFS_HAS_SS_COUNT
-    __le32 ss_count;
-#endif
-    struct {
-        struct usb_interface_descriptor intf;
-        struct usb_endpoint_descriptor_no_audio source;
-        struct usb_endpoint_descriptor_no_audio sink;
-    } __attribute__((packed)) fs_descs, hs_descs;
-#ifdef FUNCTIONFS_SS_DESC_MAGIC
-    __le32 ss_magic;
-    __le32 ss_count;
-#endif
-#ifdef HAS_SS_DESCS
-    struct {
-        struct usb_interface_descriptor intf;
-        struct usb_endpoint_descriptor_no_audio source;
-        struct usb_ss_ep_comp_descriptor source_comp;
-        struct usb_endpoint_descriptor_no_audio sink;
-        struct usb_ss_ep_comp_descriptor sink_comp;
-    } __attribute__((packed)) ss_descs;
-#endif
-} __attribute__((packed)) descriptors = {
-    .header = {
-        .magic = cpu_to_le32(FUNCTIONFS_DESCRIPTORS_MAGIC),
-        .length = cpu_to_le32(sizeof(descriptors)),
-        .fs_count = 3,
-        .hs_count = 3,
-    },
-#ifdef FUNCTIONFS_HAS_SS_COUNT
-    .ss_count = 5,
-#endif
-    .fs_descs = {
-        .intf = {
-            .bLength = sizeof(descriptors.fs_descs.intf),
-            .bDescriptorType = USB_DT_INTERFACE,
-            .bInterfaceNumber = 0,
-            .bNumEndpoints = 2,
-            .bInterfaceClass = ADB_CLASS,
-            .bInterfaceSubClass = ADB_SUBCLASS,
-            .bInterfaceProtocol = ADB_PROTOCOL,
-            .iInterface = 1, /* first string from the provided table */
-        },
-        .source = {
-            .bLength = sizeof(descriptors.fs_descs.source),
-            .bDescriptorType = USB_DT_ENDPOINT,
-            .bEndpointAddress = 1 | USB_DIR_OUT,
-            .bmAttributes = USB_ENDPOINT_XFER_BULK,
-            .wMaxPacketSize = MAX_PACKET_SIZE_FS,
-        },
-        .sink = {
-            .bLength = sizeof(descriptors.fs_descs.sink),
-            .bDescriptorType = USB_DT_ENDPOINT,
-            .bEndpointAddress = 2 | USB_DIR_IN,
-            .bmAttributes = USB_ENDPOINT_XFER_BULK,
-            .wMaxPacketSize = MAX_PACKET_SIZE_FS,
-        },
     },
     .source_comp = {
         .bLength = sizeof(ss_descriptors.source_comp),
@@ -240,44 +178,6 @@ static const struct {
     .sink_comp = {
         .bLength = sizeof(ss_descriptors.sink_comp),
         .bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
-#ifdef FUNCTIONFS_SS_DESC_MAGIC
-    .ss_magic = FUNCTIONFS_SS_DESC_MAGIC,
-    .ss_count = 5,
-#endif
-#ifdef HAS_SS_DESCS
-    .ss_descs = {
-        .intf = {
-            .bLength = sizeof(descriptors.ss_descs.intf),
-            .bDescriptorType = USB_DT_INTERFACE,
-            .bInterfaceNumber = 0,
-            .bNumEndpoints = 2,
-            .bInterfaceClass = ADB_CLASS,
-            .bInterfaceSubClass = ADB_SUBCLASS,
-            .bInterfaceProtocol = ADB_PROTOCOL,
-            .iInterface = 1, /* first string from the provided table */
-        },
-        .source = {
-            .bLength = sizeof(descriptors.ss_descs.source),
-            .bDescriptorType = USB_DT_ENDPOINT,
-            .bEndpointAddress = 1 | USB_DIR_OUT,
-            .bmAttributes = USB_ENDPOINT_XFER_BULK,
-            .wMaxPacketSize = 1024,
-        },
-        .source_comp = {
-            .bLength = sizeof(descriptors.ss_descs.source_comp),
-            .bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
-        },
-        .sink = {
-            .bLength = sizeof(descriptors.ss_descs.sink),
-            .bDescriptorType = USB_DT_ENDPOINT,
-            .bEndpointAddress = 2 | USB_DIR_IN,
-            .bmAttributes = USB_ENDPOINT_XFER_BULK,
-            .wMaxPacketSize = 1024,
-        },
-        .sink_comp = {
-            .bLength = sizeof(descriptors.ss_descs.sink_comp),
-            .bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
-        },
     },
 };
 
